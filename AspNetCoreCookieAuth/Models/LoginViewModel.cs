@@ -8,11 +8,12 @@ namespace AspNetCoreCookieAuth.Models
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "{0} の入力が必要です。")]
         [Display(Name = "ユーザー名")]
         public string UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "{0} の入力が必要です。")]
+        [Display(Name = "パスワード")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

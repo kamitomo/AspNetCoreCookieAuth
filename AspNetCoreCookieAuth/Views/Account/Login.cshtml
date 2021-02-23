@@ -4,8 +4,27 @@
 }
 <div>
     <form asp-action="Login" method="post">
-        ユーザー名: <input asp-for="UserId" /><br />
-        パスワード: <input asp-for="Password" /><br />
-        <button type="submit">ログイン</button>
+        <div>
+            <div asp-validation-summary="ModelOnly"></div>
+            <div>
+                <label asp-for="UserId"></label>
+                <div>
+                    <input asp-for="UserId" />
+                    <span asp-validation-for="UserId"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="Password"></label>
+                <div>
+                    <input asp-for="Password" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+            </div>
+            <div>
+                <div>
+                    <button type="submit">ログイン</button>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
