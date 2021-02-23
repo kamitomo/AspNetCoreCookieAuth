@@ -22,7 +22,7 @@ namespace AspNetCoreCookieAuth.Data
             PasswordHasher hasher = new PasswordHasher();
             (string hashedPassword, byte[] salt) = hasher.HashPassword("dFhJAmM-DGc8Wjt4WM7h");
 
-            User user = new User { UserId = "demouser", HashedPassword = hashedPassword, Salt = salt };
+            User user = new User { UserId = "demouser", HashedPassword = hashedPassword, Salt = salt, Admin = true };
 
             context.Users.Add(user);
             context.SaveChanges();

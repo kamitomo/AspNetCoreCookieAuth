@@ -51,10 +51,14 @@ namespace AspNetCoreCookieAuth.Controllers
 			}
 
 			// サインイン用にプリンシパルを作成
-			var claims = new[] {
+			var claims = new List<Claim>() {
 				new Claim(ClaimTypes.Name, user.UserId),
 				new Claim("LastChanged", user.UpdatedAt.ToString())
 			};
+			if (user.Admin)
+            {
+				claims.Add(new Claim("Admin", "Admin"));
+            }
 			var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 			var principal = new ClaimsPrincipal(identity);
 
@@ -70,6 +74,11 @@ namespace AspNetCoreCookieAuth.Controllers
 			await HttpContext.SignOutAsync();
 
 			return RedirectToAction("Login");
+		}
+
+		public IActionResult AccessDenied()
+		{
+			return View();
 		}
 	}
 }

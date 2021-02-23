@@ -22,7 +22,7 @@ namespace AspNetCoreCookieAuth.Models
         /// ハッシュ化パスワード
         /// </summary>
         [Required]
-        [MaxLength(100)]
+        [MaxLength(100), MinLength(6)]
         public string HashedPassword { get; set; }
         
         /// <summary>
@@ -30,6 +30,11 @@ namespace AspNetCoreCookieAuth.Models
         /// </summary>
         [Required]
         public byte[] Salt { get; set; }
+
+        /// <summary>
+        /// 管理者
+        /// </summary>
+        public bool Admin { get; set; }
 
         [Required]
         public DateTimeOffset CreatedAt { get; set; }

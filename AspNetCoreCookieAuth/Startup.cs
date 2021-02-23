@@ -43,6 +43,14 @@ namespace AspNetCoreCookieAuth
                     options.EventsType = typeof(CustomCookieAuthenticationEvents);
                 });
             services.AddScoped<CustomCookieAuthenticationEvents>();
+
+            // 認可サービスを追加（クレームベースの認可）
+            services.AddAuthorization(options =>
+            {
+                // 管理者クレームが必要なポリシーを追加
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
+            });
+            
             services.AddControllersWithViews();
         }
 

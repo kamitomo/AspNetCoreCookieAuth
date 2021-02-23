@@ -14,6 +14,7 @@ namespace AspNetCoreCookieAuth.Migrations
                     UserId = table.Column<string>(type: "character varying(30)", maxLength: 30, nullable: false),
                     HashedPassword = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Salt = table.Column<byte[]>(type: "bytea", nullable: false),
+                    Admin = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },

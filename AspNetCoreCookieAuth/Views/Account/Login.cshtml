@@ -1,16 +1,11 @@
 ﻿@model LoginViewModel
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Login</title>
-</head>
-<body>
+@{
+    ViewData["Title"] = "Login";
+}
+<div>
     <form asp-action="Login" method="post">
         ユーザー名: <input asp-for="UserId" /><br />
         パスワード: <input asp-for="Password" /><br />
         <button type="submit">ログイン</button>
     </form>
-</body>
-</html>
+</div>

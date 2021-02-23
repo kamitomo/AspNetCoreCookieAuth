@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AspNetCoreCookieAuth.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210220001449_Init")]
+    [Migration("20210223141211_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,9 @@ namespace AspNetCoreCookieAuth.Migrations
                     b.Property<string>("UserId")
                         .HasMaxLength(30)
                         .HasColumnType("character varying(30)");
+
+                    b.Property<bool>("Admin")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
