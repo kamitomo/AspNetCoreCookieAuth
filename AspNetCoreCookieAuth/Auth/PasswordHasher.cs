@@ -2,7 +2,7 @@
 using System;
 using System.Security.Cryptography;
 
-namespace AspNetCoreCookieAuth
+namespace AspNetCoreCookieAuth.Auth
 {
     /// <summary>
     /// パスワード処理のクラス

@@ -1,3 +1,4 @@
+using AspNetCoreCookieAuth.Auth;
 using AspNetCoreCookieAuth.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -38,8 +39,10 @@ namespace AspNetCoreCookieAuth
                 {
                     // 認証クッキー名を設定
                     options.Cookie.Name = "AspNetCoreCookieAuth";
+                    // バックエンドでユーザアカウントが無効になっているか検知するイベントを設定
+                    options.EventsType = typeof(CustomCookieAuthenticationEvents);
                 });
-
+            services.AddScoped<CustomCookieAuthenticationEvents>();
             services.AddControllersWithViews();
         }
 

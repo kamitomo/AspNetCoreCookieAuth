@@ -10,7 +10,7 @@ namespace AspNetCoreCookieAuth.Models
     {
         [Required]
         [Display(Name = "ユーザー名")]
-        public string UserName { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

@@ -1,4 +1,5 @@
-﻿using AspNetCoreCookieAuth.Data;
+﻿using AspNetCoreCookieAuth.Auth;
+using AspNetCoreCookieAuth.Data;
 using AspNetCoreCookieAuth.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -35,7 +36,7 @@ namespace AspNetCoreCookieAuth.Controllers
 			}
 
 			// ユーザ検索
-			var users = this._context.Users.Where(user => user.UserName == model.UserName);
+			var users = this._context.Users.Where(user => user.UserId == model.UserId);
 			if (users.Count() == 0)
             {
 				return View(model);
@@ -51,7 +52,8 @@ namespace AspNetCoreCookieAuth.Controllers
 
 			// サインイン用にプリンシパルを作成
 			var claims = new[] {
-				new Claim(ClaimTypes.Name, user.UserName),
+				new Claim(ClaimTypes.Name, user.UserId),
+				new Claim("LastChanged", user.UpdatedAt.ToString())
 			};
 			var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 			var principal = new ClaimsPrincipal(identity);

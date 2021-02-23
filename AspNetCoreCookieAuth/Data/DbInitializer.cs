@@ -1,4 +1,5 @@
-﻿using AspNetCoreCookieAuth.Models;
+﻿using AspNetCoreCookieAuth.Auth;
+using AspNetCoreCookieAuth.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace AspNetCoreCookieAuth.Data
             PasswordHasher hasher = new PasswordHasher();
             (string hashedPassword, byte[] salt) = hasher.HashPassword("dFhJAmM-DGc8Wjt4WM7h");
 
-            User user = new User { UserName = "demouser", HashedPassword = hashedPassword, Salt = salt };
+            User user = new User { UserId = "demouser", HashedPassword = hashedPassword, Salt = salt };
 
             context.Users.Add(user);
             context.SaveChanges();
