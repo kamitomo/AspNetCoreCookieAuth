@@ -39,6 +39,7 @@ namespace AspNetCoreCookieAuth.Controllers
 			var users = this._context.Users.Where(user => user.UserId == model.UserId);
 			if (users.Count() == 0)
             {
+				ModelState.AddModelError(string.Empty, "ユーザー名もしくはパスワードに誤りがあります。");
 				return View(model);
 			}
 			var user = users.Single();
@@ -47,6 +48,7 @@ namespace AspNetCoreCookieAuth.Controllers
 			PasswordHasher hasher = new PasswordHasher();
 			if (!hasher.VerifyPassword(user.HashedPassword, model.Password, user.Salt))
             {
+				ModelState.AddModelError(string.Empty, "ユーザー名もしくはパスワードに誤りがあります。");
 				return View(model);
 			}
 
