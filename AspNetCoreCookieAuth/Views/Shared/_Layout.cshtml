@@ -4,20 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - AspNetCoreCookieAuth</title>
+    <link rel="stylesheet" href="~/lib/primer/primer.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="container">
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
+    @RenderBody()
 
-    <footer>
-        <div>
-            &copy; 2021 - AspNetCoreCookieAuth - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

@@ -1,1 +1,9 @@
 ﻿
+.validation-summary-valid {
+    display: none;
+}
+
+.validation-summary-errors ul {
+    padding-left: 0;
+    list-style: none;
+}

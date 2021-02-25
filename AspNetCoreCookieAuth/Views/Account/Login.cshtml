@@ -2,29 +2,25 @@
 @{
     ViewData["Title"] = "Login";
 }
-<div>
-    <form asp-action="Login" method="post">
-        <div>
-            <div asp-validation-summary="ModelOnly"></div>
-            <div>
-                <label asp-for="UserId"></label>
+
+<div style="margin: 0 auto; width: 360px;">
+    <h1 class="f3-light text-center">サインイン</h1>
+    <div asp-validation-summary="All" class="flash mt-3 flash-error"></div>
+    <div class="Box mt-3">
+        <div class="Box-row Box-row--gray">
+            <form asp-action="Login" method="post">
                 <div>
-                    <input asp-for="UserId" />
-                    <span asp-validation-for="UserId"></span>
+                    <label asp-for="UserId" class="mb-2 d-block" for="username">ユーザー名</label>
+                    <input asp-for="UserId" class="form-control input-block mb-3" type="text" />
                 </div>
-            </div>
-            <div>
-                <label asp-for="Password"></label>
                 <div>
-                    <input asp-for="Password" />
-                    <span asp-validation-for="Password"></span>
+                    <label asp-for="Password" class="mb-2 d-block" for="password">パスワード</label>
+                    <input asp-for="Password" class="form-control input-block mb-3" type="password" />
                 </div>
-            </div>
-            <div>
-                <div>
-                    <button type="submit">ログイン</button>
-                </div>
-            </div>
+                <button type="submit" name="login" class="btn btn-primary btn-block mt-5">
+                    サインイン
+                </button>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
