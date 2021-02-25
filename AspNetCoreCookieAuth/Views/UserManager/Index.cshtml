@@ -1,7 +1,33 @@
-﻿@model LoginViewModel
+﻿@model IEnumerable<UserListItem>
 @{
     ViewData["Title"] = "ユーザー管理";
 }
 <div>
     <h1>ユーザー管理</h1>
+
+    <a asp-action="Create">ユーザー登録</a>
+
+    <div class="markdown-body">
+        <table>
+            <thead>
+                <tr>
+                    <th>ユーザー名</th>
+                    <th>管理者</th>
+                    <th>更新日時</th>
+                    <th>作成日時</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@Html.Raw(user.UserId)</td>
+                        <td>@Html.Raw(user.Admin)</td>
+                        <td>@Html.Raw(user.UpdatedAt)</td>
+                        <td>@Html.Raw(user.CreatedAt)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
