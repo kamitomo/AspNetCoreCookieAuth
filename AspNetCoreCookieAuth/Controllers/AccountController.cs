@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,72 +16,73 @@ namespace AspNetCoreCookieAuth.Controllers
 {
     public class AccountController : Controller
     {
-		private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-		public AccountController(ApplicationDbContext context)
-		{
-			_context = context;
-		}
+        public AccountController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
-		public IActionResult Login()
+        public IActionResult Login()
         {
             return View();
         }
 
-		[HttpPost]
-		public async Task<IActionResult> Login(LoginViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(model);
-			}
-
-			// ユーザ検索
-			var users = this._context.Users.Where(user => user.UserId == model.UserId);
-			if (users.Count() == 0)
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
             {
-				ModelState.AddModelError(string.Empty, "ユーザー名もしくはパスワードに誤りがあります。");
-				return View(model);
-			}
-			var user = users.Single();
-
-			// パスワードの確認
-			PasswordHasher hasher = new PasswordHasher();
-			if (!hasher.VerifyPassword(user.HashedPassword, model.Password, user.Salt))
-            {
-				ModelState.AddModelError(string.Empty, "ユーザー名もしくはパスワードに誤りがあります。");
-				return View(model);
-			}
-
-			// サインイン用にプリンシパルを作成
-			var claims = new List<Claim>() {
-				new Claim(ClaimTypes.Name, user.UserId),
-				new Claim("LastChanged", user.UpdatedAt.ToString())
-			};
-			if (user.Admin)
-            {
-				claims.Add(new Claim("Admin", "Admin"));
+                return View(model);
             }
-			var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-			var principal = new ClaimsPrincipal(identity);
 
-			// サインイン
-			await HttpContext.SignInAsync(principal);
+            // ユーザ検索
+            var user = await this._context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.UserId == model.UserId);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "ユーザー名もしくはパスワードに誤りがあります。");
+                return View(model);
+            }
 
-			return RedirectToAction("Index", "Home");
-		}
+            // パスワードの確認
+            PasswordHasher hasher = new PasswordHasher();
+            if (!hasher.VerifyPassword(user.HashedPassword, model.Password, user.Salt))
+            {
+                ModelState.AddModelError(string.Empty, "ユーザー名もしくはパスワードに誤りがあります。");
+                return View(model);
+            }
 
-		public async Task<IActionResult> Logout()
-		{
-			// サインアウト
-			await HttpContext.SignOutAsync();
+            // サインイン用にプリンシパルを作成
+            var claims = new List<Claim>() {
+                new Claim(ClaimTypes.Name, user.UserId),
+                new Claim("LastChanged", user.UpdatedAt.ToString())
+            };
+            if (user.Admin)
+            {
+                claims.Add(new Claim("Admin", "Admin"));
+            }
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
 
-			return RedirectToAction("Login");
-		}
+            // サインイン
+            await HttpContext.SignInAsync(principal);
 
-		public IActionResult AccessDenied()
-		{
-			return View();
-		}
-	}
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            // サインアウト
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction(nameof(Login));
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+    }
 }

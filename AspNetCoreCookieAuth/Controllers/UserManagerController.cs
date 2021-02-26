@@ -3,6 +3,7 @@ using AspNetCoreCookieAuth.Data;
 using AspNetCoreCookieAuth.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,15 +23,17 @@ namespace AspNetCoreCookieAuth.Controllers
 
         public IActionResult Index()
         {
-            var users = _context.Users.Select(user =>
-                new UserListItem
-                {
-                    UserId = user.UserId,
-                    Admin = user.Admin,
-                    CreatedAt = user.CreatedAt,
-                    UpdatedAt = user.UpdatedAt,
-                }
-            );
+            var users = _context.Users
+                .AsNoTracking()
+                .Select(user =>
+                    new UserListItem
+                    {
+                        UserId = user.UserId,
+                        Admin = user.Admin,
+                        CreatedAt = user.CreatedAt,
+                        UpdatedAt = user.UpdatedAt,
+                    }
+                );
             return View(users);
         }
 
@@ -40,14 +43,17 @@ namespace AspNetCoreCookieAuth.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(RegisterUser model)
+        public async Task<IActionResult> Create(RegisterUser model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
-            var registered = _context.Users.Find(model.UserId);
+            var registered = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.UserId == model.UserId);
+            
             if (registered != null)
             {
                 ModelState.AddModelError(string.Empty, "すでにこのユーザー名は使用されています。");
@@ -60,15 +66,22 @@ namespace AspNetCoreCookieAuth.Controllers
                 return View(model);
             }
 
+            #region 新規ユーザ登録処理
+
+            // ハッシュ化パスワードとソルトを作成
             PasswordHasher hasher = new PasswordHasher();
             (string hashedPassword, byte[] salt) = hasher.HashPassword(model.Password);
 
+            // ユーザを新規作成
             User user = new User { UserId = model.UserId, HashedPassword = hashedPassword, Salt = salt, Admin = false };
 
+            // ユーザテーブルに追加
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            #endregion
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
