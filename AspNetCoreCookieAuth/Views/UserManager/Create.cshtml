@@ -12,7 +12,7 @@
     <div class="Box mt-3">
         <div class="Box-row">
             <form asp-action="Create" method="post">
-                <div class="form-group @(ViewData.ModelState["UserId"] != null && ViewData.ModelState["UserId"].Errors.Any() ? "errored" : "")">
+                <div class="form-group @(Html.hasValidationError(model => model.UserId) ? "errored" : "")">
                     <div class="form-group-header">
                         <label asp-for="UserId"></label>
                     </div>
@@ -23,8 +23,7 @@
                                aria-describedby="username-input-validation" />
                     </div>
                 </div>
-
-                <div class="form-group @(ViewData.ModelState["Password"] != null && ViewData.ModelState["UserId"].Errors.Any() ? "errored" : "")">
+                <div class="form-group @(Html.hasValidationError(model => model.Password) ? "errored" : "")">
                     <div class="form-group-header">
                         <label asp-for="Password"></label>
                     </div>
@@ -35,8 +34,7 @@
                                aria-describedby="password-input-validation" />
                     </div>
                 </div>
-
-                <div class="form-group @(ViewData.ModelState["ConfirmPassword"] != null && ViewData.ModelState["UserId"].Errors.Any() ? "errored" : "")">
+                <div class="form-group @(Html.hasValidationError(model => model.ConfirmPassword) ? "errored" : "")">
                     <div class="form-group-header">
                         <label asp-for="ConfirmPassword"></label>
                     </div>
