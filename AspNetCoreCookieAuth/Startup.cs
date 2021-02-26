@@ -17,12 +17,15 @@ namespace AspNetCoreCookieAuth
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
+
+        private readonly IWebHostEnvironment _env;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -51,7 +54,14 @@ namespace AspNetCoreCookieAuth
                 options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
             });
             
-            services.AddControllersWithViews();
+            // MVC サービスを追加
+            var mvcBuilder = services.AddControllersWithViews();
+
+            // 開発時のみ Razor の実行時コンパイルを有効化
+            if (this._env.IsDevelopment())
+            {
+                mvcBuilder.AddRazorRuntimeCompilation();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
